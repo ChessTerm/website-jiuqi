@@ -1,0 +1,19 @@
+<component name="ProjectCodeStyleConfiguration">
+  <code_scheme name="Project" version="173">
+    <JavaCodeStyleSettings>
+      <option name="SPACE_BEFORE_COLON_IN_FOREACH" value="false" />
+      <option name="JD_KEEP_INVALID_TAGS" value="false" />
+      <option name="JD_KEEP_EMPTY_PARAMETER" value="false" />
+      <option name="JD_KEEP_EMPTY_EXCEPTION" value="false" />
+      <option name="JD_KEEP_EMPTY_RETURN" value="false" />
+    </JavaCodeStyleSettings>
+    <ScalaCodeStyleSettings>
+      <option name="MULTILINE_STRING_CLOSING_QUOTES_ON_NEW_LINE" value="true" />
+    </ScalaCodeStyleSettings>
+    <codeStyleSettings language="JAVA">
+      <indentOptions>
+        <option name="CONTINUATION_INDENT_SIZE" value="4" />
+      </indentOptions>
+    </codeStyleSettings>
+  </code_scheme>
+</component>
