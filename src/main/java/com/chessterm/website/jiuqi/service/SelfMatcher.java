@@ -2,6 +2,7 @@ package com.chessterm.website.jiuqi.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.util.matcher.RequestMatcher;
@@ -18,20 +19,23 @@ public class SelfMatcher implements RequestMatcher {
     @Override
     public boolean matches(HttpServletRequest request) {
         String method = request.getMethod();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        for (GrantedAuthority authority: authentication.getAuthorities()) {
+            if (authority.getAuthority().equals("admin")) return true;
+        }
         if (method.equals("GET") || method.equals("PUT") || method.equals("PATCH")) {
             String url = request.getRequestURI();
             String inputUserId = null;
-            Pattern pattern = Pattern.compile("/users/(.*)\\.?");
+            Pattern pattern = Pattern.compile("users/(.*)\\.?");
             Matcher matcher = pattern.matcher(url);
             if (matcher.find()) {
                 inputUserId = matcher.group(1);
             } else {
-                pattern = Pattern.compile("/boards/(.*)\\.?");
+                pattern = Pattern.compile("boards/(.*)\\.?");
                 matcher = pattern.matcher(url);
                 if (matcher.find()) inputUserId = matcher.group(1);
             }
             if (inputUserId != null) {
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 if (authentication.getPrincipal().equals(inputUserId)) {
                     return true;
                 } else {

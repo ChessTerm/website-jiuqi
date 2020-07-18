@@ -1,12 +1,12 @@
+# Global config
 spring:
   jpa:
     hibernate:
       ddl-auto: update
   profiles:
     active: prod
-
 ---
-
+# Dev config
 spring:
   profiles: dev
   datasource:
