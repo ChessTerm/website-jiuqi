@@ -11,3 +11,10 @@ services:
       MYSQL_DATABASE: spring
       MYSQL_USER: spring
       MYSQL_PASSWORD: spring
+
+  pma:
+    image: "phpmyadmin/phpmyadmin"
+    ports:
+      - 8080:80
+    links:
+      - db:db

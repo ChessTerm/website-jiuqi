@@ -1,12 +1,13 @@
 plugins {
-	id 'org.springframework.boot' version '2.3.1.RELEASE'
-	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-	id 'java'
+	id "java"
+	id "maven"
+	id "org.springframework.boot" version "2.3.1.RELEASE"
+	id "io.spring.dependency-management" version "1.0.9.RELEASE"
+	id "io.freefair.lombok" version "5.1.0"
 }
 
-group = 'com.chessterm'
-version = '0.1.0-SNAPSHOT'
-sourceCompatibility = '1.8'
+group = "com.chessterm"
+version = "0.1.0-SNAPSHOT"
 
 configurations {
 	compileOnly {
@@ -15,25 +16,34 @@ configurations {
 }
 
 repositories {
-	maven { url 'https://maven.aliyun.com/repository/public/' }
-    maven { url 'https://maven.aliyun.com/repository/spring/'}
+	maven { url "https://maven.aliyun.com/repository/public/" }
+    maven { url "https://maven.aliyun.com/repository/spring/" }
     mavenLocal()
     mavenCentral()
+	maven {
+		url "https://maven.pkg.github.com/ChessTerm/flamechess-java"
+		credentials {
+			username System.getenv("GITHUB_USER")
+			// Due to GitHub restrictions, you must set the GITHUB_TOKEN environment variable.
+			password System.getenv("GITHUB_TOKEN")
+		}
+	}
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-websocket'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.security:spring-security-test'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'mysql:mysql-connector-java'
-	compile 'commons-codec:commons-codec:1.14'
-	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+	implementation "org.springframework.boot:spring-boot-starter-data-rest"
+	implementation "org.springframework.boot:spring-boot-starter-web"
+	implementation "org.springframework.boot:spring-boot-starter-websocket"
+	implementation "org.springframework.boot:spring-boot-starter-security"
+	implementation "org.springframework.security:spring-security-test"
+	implementation "com.chessterm:flamechess:0.2.0"
+	developmentOnly "org.springframework.boot:spring-boot-devtools"
+	runtimeOnly "mysql:mysql-connector-java"
+	compile "commons-codec:commons-codec:1.14"
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+	testImplementation("org.springframework.boot:spring-boot-starter-test") {
+		exclude group: "org.junit.vintage", module: "junit-vintage-engine"
 	}
 }
 
