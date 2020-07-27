@@ -29,10 +29,10 @@ public class Game {
 
     private String availablePositions;
 
-    @Column(name="`row`", nullable = false)
+    @Column(name = "`row`", nullable = false)
     private int row;
 
-    @Column(name="`column`", nullable = false)
+    @Column(name = "`column`", nullable = false)
     private int column;
 
     public State getInitialState() {

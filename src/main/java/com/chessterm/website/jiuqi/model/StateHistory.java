@@ -11,7 +11,8 @@ import javax.persistence.*;
 @Setter
 public class StateHistory {
 
-    public StateHistory() {}
+    public StateHistory() {
+    }
 
     public StateHistory(Board board) {
         this.board = board;
@@ -20,7 +21,8 @@ public class StateHistory {
     }
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "state_history_sequence")
+    @SequenceGenerator(name = "state_history_sequence", allocationSize = 1)
     private long id;
 
     @OneToOne
