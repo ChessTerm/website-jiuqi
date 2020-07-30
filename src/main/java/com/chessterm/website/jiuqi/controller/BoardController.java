@@ -104,15 +104,15 @@ public class BoardController {
         return new Role(true, false);
     }
 
-    private Board updateState(Board board, State state) {
+    protected Board updateState(Board board, State state) {
         long time = System.currentTimeMillis();
+        board.setState(state);
+        board.setTimestamp(time);
+        board = boardRepository.save(board);
         StateHistory lastHistory = stateRepository.findFirstByBoardIdOrderByTimestampDesc(board.getId());
         if (!(lastHistory != null && lastHistory.getState().equals(state))) {
-            board.setState(state);
             if (state.equals(board.getGame().getInitialState()))
                 stateRepository.deleteByBoardId(board.getId());
-            board.setTimestamp(time);
-            board = boardRepository.save(board);
             StateHistory history = new StateHistory(board);
             stateRepository.save(history);
         }

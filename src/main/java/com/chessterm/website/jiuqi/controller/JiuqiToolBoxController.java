@@ -28,6 +28,9 @@ public class JiuqiToolBoxController {
     @Autowired
     BoardRepository boardRepository;
 
+    @Autowired
+    BoardController boardController;
+
     @PostMapping("/parse_state")
     public void parseState(@RequestBody String request, @AuthenticationPrincipal User user,
                            HttpServletResponse response) {
@@ -35,6 +38,7 @@ public class JiuqiToolBoxController {
         if (board != null) {
             Scanner scanner = new Scanner(request);
             State state = new State(StateParser.parse(scanner));
+            boardController.updateState(board, state);
             template.convertAndSend(String.format("/topic/boards/%s/sync", board.getId()), state);
         } else response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
