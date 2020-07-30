@@ -15,6 +15,10 @@ import java.io.IOException;
 @JsonDeserialize(using = State.Deserializer.class)
 public class State extends com.jingbh.flamechess.State {
 
+    public State(com.jingbh.flamechess.State state) {
+        super(state.get2dState());
+    }
+
     public State(byte[] state, int size) {
         super(state, size);
     }

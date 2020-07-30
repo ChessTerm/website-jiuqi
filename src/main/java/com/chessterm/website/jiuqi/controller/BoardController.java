@@ -8,6 +8,7 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -93,8 +94,14 @@ public class BoardController {
         if (owner.getPassword() == null || owner.getPassword().isEmpty()) {
             return new Role(true, true);
         } else if (user != null) {
-            return new Role(true, user.getId() == owner.getId());
-        } else return new Role(true, false);
+            if (user.getId() == owner.getId()) {
+                return new Role(true, true);
+            } else for (GrantedAuthority authority: user.getAuthorities()) {
+                if (authority.getAuthority().equals("admin"))
+                    return new Role(true, true);
+            }
+        }
+        return new Role(true, false);
     }
 
     private Board updateState(Board board, State state) {

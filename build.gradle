@@ -7,7 +7,12 @@ plugins {
 }
 
 group = "com.chessterm"
-version = "1.0.0"
+version = "1.1.0"
+
+java {
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
+}
 
 configurations {
 	compileOnly {
@@ -24,7 +29,7 @@ repositories {
 		url "https://maven.pkg.github.com/ChessTerm/flamechess-java"
 		credentials {
 			username System.getenv("GITHUB_USER")
-			// Due to GitHub restrictions, you must set the GITHUB_TOKEN environment variable.
+			// Due to GitHub restrictions, you must set the GITHUB_TOKEN variable.
 			password System.getenv("GITHUB_TOKEN")
 		}
 	}
@@ -37,7 +42,7 @@ dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-websocket"
 	implementation "org.springframework.boot:spring-boot-starter-security"
 	implementation "org.springframework.security:spring-security-test"
-	implementation "com.chessterm:flamechess:0.2.0"
+	implementation "com.chessterm:flamechess:0.3.0-SNAPSHOT"
 	developmentOnly "org.springframework.boot:spring-boot-devtools"
 	runtimeOnly "mysql:mysql-connector-java"
 	compile "commons-codec:commons-codec:1.14"

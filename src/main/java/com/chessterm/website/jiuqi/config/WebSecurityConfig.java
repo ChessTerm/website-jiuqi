@@ -30,7 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
                 .antMatchers(HttpMethod.DELETE).hasAuthority("admin")
                 .antMatchers("/", "/user/exists", "/ws/**").permitAll()
-                .antMatchers("/user/**").authenticated()
+                .antMatchers("/user/**", "/jiuqi_toolbox/**").authenticated()
                 .antMatchers(HttpMethod.GET, "/games/**", "/boards/**").permitAll()
                 .requestMatchers(selfMatcher()).permitAll()
                 .antMatchers("/**").hasAuthority("admin")
