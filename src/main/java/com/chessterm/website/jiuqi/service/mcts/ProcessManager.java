@@ -7,6 +7,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -60,9 +61,11 @@ public class ProcessManager {
         String separator = System.getProperty("file.separator");
         List<String> command = new ArrayList<>();
         command.add(javaHome + separator + "bin" + separator + "java");
-        command.add("-Xmx512M");  // Limit process RAM to 0.5GB.
         command.add("-cp");
         command.add(System.getProperty("java.class.path"));
+        command.add("-cp");
+        command.add("./*");
+        command.add("-Xmx512M");  // Limit process RAM to 0.5GB.
         command.add(Runner.class.getName());
         return new ProcessBuilder(command);
     }
@@ -87,7 +90,7 @@ public class ProcessManager {
                                 if (!text.isEmpty()) {
                                     int progress = Integer.parseInt(text);
                                     int max = Math.max(progress + 10, 1000);
-                                    meta.getCallbacks().onProgress.accept(new Runner.Progress(progress, max));
+                                    meta.getCallbacks().onProgress.accept(new Progress(progress, max));
                                 }
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -108,6 +111,11 @@ public class ProcessManager {
                             }
                         } else {
                             String message = "Process exited unexpectedly. (" + exitValue + ")";
+                            InputStream stream = process.getErrorStream();
+                            Scanner scanner = new Scanner(stream);
+                            while (scanner.hasNextLine()) {
+                                System.err.println(scanner.nextLine());
+                            }
                             meta.getCallbacks().onFailure.accept(message);
                         }
                     }

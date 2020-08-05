@@ -45,7 +45,7 @@ dependencies {
 	implementation "com.chessterm:flamechess:0.3.3-SNAPSHOT"
 	developmentOnly "org.springframework.boot:spring-boot-devtools"
 	runtimeOnly "mysql:mysql-connector-java"
-	compile "commons-codec:commons-codec:1.14"
+	implementation "commons-codec:commons-codec:1.14"
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
 		exclude group: "org.junit.vintage", module: "junit-vintage-engine"
@@ -54,4 +54,16 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+}
+
+jar {
+	enabled = true
+
+	from {
+		configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+	}
+}
+
+bootJar {
+	classifier 'boot'
 }

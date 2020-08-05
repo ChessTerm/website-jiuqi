@@ -19,6 +19,10 @@
         <module name="website.jiuqi.main" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.8" />
+    <bytecodeTargetLevel target="1.8">
+      <module name="website.jiuqi.mcts-runner" target="14" />
+      <module name="website.jiuqi.mcts-runner.main" target="14" />
+      <module name="website.jiuqi.mcts-runner.test" target="14" />
+    </bytecodeTargetLevel>
   </component>
 </project>

@@ -4,7 +4,6 @@ import com.chessterm.website.jiuqi.model.State;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jingbh.flamechess.jiuqi.Game;
 import com.jingbh.flamechess.jiuqi.mcts.Tree;
-import lombok.Getter;
 
 import java.io.IOException;
 
@@ -31,23 +30,6 @@ public class Runner {
         } catch (IllegalArgumentException | IOException e) {
             e.printStackTrace();
             System.exit(1);
-        }
-    }
-
-    @Getter
-    public static class Progress {
-
-        private final int now;
-
-        private final int all;
-
-        public Progress(int now, int all) {
-            this.now = now;
-            this.all = all;
-        }
-
-        public double getPercentage() {
-            return ((double) now) / ((double) all);
         }
     }
 }

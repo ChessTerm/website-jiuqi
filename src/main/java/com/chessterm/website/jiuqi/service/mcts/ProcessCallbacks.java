@@ -8,11 +8,11 @@ public class ProcessCallbacks {
 
     final Consumer<String> onFailure;
     final Consumer<State> onSuccess;
-    final Consumer<Runner.Progress> onProgress;
+    final Consumer<Progress> onProgress;
 
     public ProcessCallbacks(Consumer<String> onFailure,
                             Consumer<State> onSuccess,
-                            Consumer<Runner.Progress> onProgress) {
+                            Consumer<Progress> onProgress) {
         this.onFailure = onFailure;
         this.onSuccess = onSuccess;
         this.onProgress = onProgress;
