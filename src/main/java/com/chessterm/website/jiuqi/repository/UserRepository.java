@@ -6,4 +6,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 
     User findById(long id);
+
+    User findByIdGreaterThanEqualOrderByIdDesc(long id);
 }

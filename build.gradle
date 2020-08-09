@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.chessterm"
-version = "1.2.0"
+version = "1.2.1"
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_1_8
@@ -41,19 +41,14 @@ dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-web"
 	implementation "org.springframework.boot:spring-boot-starter-websocket"
 	implementation "org.springframework.boot:spring-boot-starter-security"
-	implementation "org.springframework.security:spring-security-test"
+	implementation "org.springframework.boot:spring-boot-starter-webflux"
+	implementation "org.kohsuke:github-api:1.115"
+	implementation "commons-codec:commons-codec:1.14"
+	implementation "org.apache.commons:commons-lang3:3.11"
 	implementation "com.chessterm:flamechess:0.3.3-SNAPSHOT"
 	developmentOnly "org.springframework.boot:spring-boot-devtools"
 	runtimeOnly "mysql:mysql-connector-java"
-	implementation "commons-codec:commons-codec:1.14"
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
-	testImplementation("org.springframework.boot:spring-boot-starter-test") {
-		exclude group: "org.junit.vintage", module: "junit-vintage-engine"
-	}
-}
-
-test {
-	useJUnitPlatform()
 }
 
 jar {

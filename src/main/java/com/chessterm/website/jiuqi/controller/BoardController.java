@@ -7,19 +7,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@RequestMapping("/boards")
 @RestController
 public class BoardController {
+
+    @Autowired
+    SimpMessagingTemplate template;
 
     @Autowired
     BoardRepository boardRepository;
@@ -27,7 +29,7 @@ public class BoardController {
     @Autowired
     StateRepository stateRepository;
 
-    @GetMapping("/boards/{id}/role")
+    @GetMapping("/{id}/role")
     public ReturnData getRole(@PathVariable long id, @AuthenticationPrincipal User user) {
         Board board = boardRepository.findById(id);
         if (board != null) {
@@ -35,7 +37,7 @@ public class BoardController {
         } else return new ReturnData(false, "Board not found.");
     }
 
-    @GetMapping("/boards/find")
+    @GetMapping("/find")
     public ReturnData find(@RequestParam(value = "user", defaultValue = "0") long userId,
                            @RequestParam("game") int gameId, @AuthenticationPrincipal User user) {
         if (userId == 0) if (user != null) userId = user.getId();
@@ -45,7 +47,7 @@ public class BoardController {
         } else return new ReturnData(false, "Board not found.");
     }
 
-    @GetMapping("/boards/{id}/history")
+    @GetMapping("/{id}/history")
     public ReturnData getHistory(@PathVariable long id) {
         Board board = boardRepository.findById(id);
         if (board != null) {

@@ -23,7 +23,7 @@ public class ProcessManager {
 
     private ProcessManager() {
         ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-        service.scheduleAtFixedRate(this.processWatcher(), 100, 1000, TimeUnit.MILLISECONDS);
+        service.scheduleAtFixedRate(this.processWatcher(), 100, 500, TimeUnit.MILLISECONDS);
     }
 
     public void createProcess(User user, Params params, ProcessCallbacks callbacks) {
@@ -59,12 +59,12 @@ public class ProcessManager {
     private static ProcessBuilder buildCommand() {
         String javaHome = System.getProperty("java.home");
         String separator = System.getProperty("file.separator");
+        String classPath = System.getProperty("java.class.path");
+        if (classPath.trim().isEmpty()) classPath = "./*";
         List<String> command = new ArrayList<>();
         command.add(javaHome + separator + "bin" + separator + "java");
         command.add("-cp");
-        command.add(System.getProperty("java.class.path"));
-        command.add("-cp");
-        command.add("./*");
+        command.add(classPath);
         command.add("-Xmx512M");  // Limit process RAM to 0.5GB.
         command.add(Runner.class.getName());
         return new ProcessBuilder(command);

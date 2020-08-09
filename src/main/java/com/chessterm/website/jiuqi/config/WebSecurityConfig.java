@@ -29,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .addFilterAt(loginAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
             .authorizeRequests()
                 .antMatchers(HttpMethod.DELETE).hasAuthority("admin")
-                .antMatchers("/", "/user/exists", "/ws/**").permitAll()
+                .antMatchers("/", "/user/exists", "/ws/**", "/oauth/**").permitAll()
                 .antMatchers("/user/**", "/jiuqi_toolbox/**").authenticated()
                 .antMatchers(HttpMethod.GET, "/games/**", "/boards/**").permitAll()
                 .requestMatchers(selfMatcher()).permitAll()
