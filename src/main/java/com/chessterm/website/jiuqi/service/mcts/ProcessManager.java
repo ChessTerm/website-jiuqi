@@ -52,6 +52,7 @@ public class ProcessManager {
         processes.forEach((process, meta) -> {
             if (meta.getUser().equals(user)) {
                 process.destroyForcibly();
+                processes.remove(process);
             }
         });
     }
@@ -60,7 +61,7 @@ public class ProcessManager {
         String javaHome = System.getProperty("java.home");
         String separator = System.getProperty("file.separator");
         String classPath = System.getProperty("java.class.path");
-        if (classPath.trim().isEmpty()) classPath = "./*";
+        if (classPath.contains("boot.jar")) classPath = "./*";
         List<String> command = new ArrayList<>();
         command.add(javaHome + separator + "bin" + separator + "java");
         command.add("-cp");
@@ -82,6 +83,7 @@ public class ProcessManager {
                         if (timePassed > maxTime) {
                             meta.getCallbacks().onFailure.accept("Process timed out.");
                             process.destroy();
+                            processes.remove(process);
                         } else {
                             try {
                                 InputStream stream = process.getErrorStream();

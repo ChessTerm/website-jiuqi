@@ -3,7 +3,8 @@ package com.chessterm.website.jiuqi.service.mcts;
 import com.chessterm.website.jiuqi.model.State;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jingbh.flamechess.jiuqi.Game;
-import com.jingbh.flamechess.jiuqi.mcts.Tree;
+import com.jingbh.flamechess.jiuqi.JiuqiState;
+import com.jingbh.flamechess.mcts.Tree;
 
 import java.io.IOException;
 
@@ -15,9 +16,10 @@ public class Runner {
 
     public static State run(Params params) {
         Game game = new Game();
-        Tree tree = new Tree(params.state, game, params.player,
-            maxNode, maxDepth, params.stage, threads, true);
-        byte[][] result = tree.toolBoxHelper().get2dState();
+        JiuqiState state = new JiuqiState(params.state.get2dState(), params.stage);
+        Tree tree = new Tree(state, game, params.player,
+            maxNode, maxDepth, 1, true);
+        com.jingbh.flamechess.State result = tree.toolBoxHelper();
         return new State(result);
     }
 
