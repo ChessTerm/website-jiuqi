@@ -1,9 +1,9 @@
 package com.chessterm.website.jiuqi.repository;
 
 import com.chessterm.website.jiuqi.model.Board;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface BoardRepository extends CrudRepository<Board, Long> {
+public interface BoardRepository extends PagingAndSortingRepository<Board, Long> {
 
     Board findById(long id);
 

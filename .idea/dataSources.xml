@@ -5,7 +5,7 @@
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://192.168.99.100:33060/spring</jdbc-url>
+      <jdbc-url>jdbc:mysql://192.168.112.129:33060/spring</jdbc-url>
     </data-source>
     <data-source source="LOCAL" name="Server DB" uuid="9ac5a62f-9db6-40c7-89bc-f948beb944e3">
       <driver-ref>mysql.8</driver-ref>

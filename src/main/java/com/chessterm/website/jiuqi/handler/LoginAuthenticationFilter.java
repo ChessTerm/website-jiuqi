@@ -1,4 +1,4 @@
-package com.chessterm.website.jiuqi.service;
+package com.chessterm.website.jiuqi.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;

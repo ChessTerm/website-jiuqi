@@ -1,6 +1,6 @@
 package com.chessterm.website.jiuqi.model;
 
-import com.chessterm.website.jiuqi.service.StateParser;
+import com.chessterm.website.jiuqi.parser.StateParser;
 import lombok.Getter;
 import lombok.Setter;
 

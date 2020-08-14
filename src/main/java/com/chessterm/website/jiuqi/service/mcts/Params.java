@@ -18,7 +18,8 @@ public class Params implements Serializable {
     /**
      * Empty constructor for deserialization.
      */
-    public Params() {}
+    public Params() {
+    }
 
     public Params(State state, byte player, Stage stage) {
         this.state = state;

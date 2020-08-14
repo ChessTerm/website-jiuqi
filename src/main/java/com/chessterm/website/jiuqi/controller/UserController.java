@@ -4,12 +4,11 @@ import com.chessterm.website.jiuqi.model.Board;
 import com.chessterm.website.jiuqi.model.Game;
 import com.chessterm.website.jiuqi.model.ReturnData;
 import com.chessterm.website.jiuqi.model.User;
-import com.chessterm.website.jiuqi.repository.BoardRepository;
-import com.chessterm.website.jiuqi.repository.GameRepository;
-import com.chessterm.website.jiuqi.repository.UserRepository;
+import com.chessterm.website.jiuqi.service.BoardService;
+import com.chessterm.website.jiuqi.service.GameService;
+import com.chessterm.website.jiuqi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,37 +19,31 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     @Autowired
-    UserRepository userRepository;
+    UserService service;
 
     @Autowired
-    GameRepository gameRepository;
+    GameService gameService;
 
     @Autowired
-    BoardRepository boardRepository;
+    BoardService boardService;
 
     @GetMapping("")
-    public ReturnData getSelfInfo() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return new ReturnData(true, authentication.getPrincipal());
+    public ReturnData getSelfInfo(@AuthenticationPrincipal User user) {
+        return new ReturnData(true, user);
     }
 
     @GetMapping("/getBoard")
-    public ReturnData getBoardInfo(@RequestParam(name = "game", defaultValue = "0") int gameId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        Game game = gameRepository.findById(gameId);
+    public ReturnData getBoardInfo(@RequestParam(name = "game", defaultValue = "0") int gameId,
+                                   @AuthenticationPrincipal User user) {
+        Game game = gameService.get(gameId);
         if (game != null) {
-            Board board = boardRepository.findByUserIdAndGameId(user.getId(), game.getId());
-            if (board == null) {
-                board = new Board(game, user);
-                board = boardRepository.save(board);
-            }
+            Board board = boardService.get(user, game, true);
             return new ReturnData(true, board);
-        } else return new ReturnData(false, "Please specify a valid gameId.");
+        } else return new ReturnData(false, "Game not found.");
     }
 
     @GetMapping("/exists")
     public ReturnData exists(@RequestParam("id") long id) {
-        return new ReturnData(true, userRepository.existsById(id));
+        return new ReturnData(true, service.exists(id));
     }
 }

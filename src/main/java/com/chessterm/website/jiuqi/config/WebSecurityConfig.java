@@ -1,6 +1,9 @@
 package com.chessterm.website.jiuqi.config;
 
-import com.chessterm.website.jiuqi.service.*;
+import com.chessterm.website.jiuqi.encoder.SHA256PasswordEncoder;
+import com.chessterm.website.jiuqi.handler.*;
+import com.chessterm.website.jiuqi.service.UserDetailsServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -9,7 +12,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
@@ -21,32 +23,35 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    UserDetailsServiceImpl userDetailsService;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
             .exceptionHandling()
-                .authenticationEntryPoint(new ApiAuthenticationEntryPoint())
-                .accessDeniedHandler(new ApiAccessDeniedHandler())
-                .and()
+            .authenticationEntryPoint(new ApiAuthenticationEntryPoint())
+            .accessDeniedHandler(new ApiAccessDeniedHandler())
+            .and()
             .addFilterAt(loginAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
             .authorizeRequests()
-                .antMatchers(HttpMethod.DELETE).hasAuthority("admin")
-                .antMatchers("/", "/user/exists", "/ws/**", "/oauth/**").permitAll()
-                .antMatchers("/user/**", "/jiuqi_toolbox/**").authenticated()
-                .antMatchers(HttpMethod.GET, "/games/**", "/boards/**").permitAll()
-                .requestMatchers(selfMatcher()).permitAll()
-                .antMatchers("/**").hasAuthority("admin")
-                .anyRequest().denyAll()
-                .and()
+            .antMatchers(HttpMethod.DELETE).hasAuthority("admin")
+            .antMatchers("/", "/user/exists", "/ws/**", "/oauth/**").permitAll()
+            .antMatchers("/user/**", "/jiuqi_toolbox/**").authenticated()
+            .antMatchers(HttpMethod.GET, "/games/**", "/boards/**").permitAll()
+            .requestMatchers(selfMatcher()).permitAll()
+            .antMatchers("/**").hasAuthority("admin")
+            .anyRequest().denyAll()
+            .and()
             .logout()
-                .invalidateHttpSession(true)
-                .logoutSuccessHandler(logoutHandler())
-                .permitAll();
+            .invalidateHttpSession(true)
+            .logoutSuccessHandler(logoutHandler())
+            .permitAll();
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customUserService())
+        auth.userDetailsService(userDetailsService)
             .passwordEncoder(passwordEncoder());
     }
 
@@ -64,11 +69,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     PasswordEncoder passwordEncoder() {
         return new SHA256PasswordEncoder();
-    }
-
-    @Bean
-    UserDetailsService customUserService() {
-        return new UserService();
     }
 
     @Bean

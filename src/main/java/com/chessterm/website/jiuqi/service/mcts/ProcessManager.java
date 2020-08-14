@@ -19,7 +19,7 @@ public class ProcessManager {
 
     private static final int maxTime = 300000;  // Kill after 5 minutes.
 
-    protected Map<Process, ProcessMeta> processes = new ConcurrentHashMap<>();
+    protected final Map<Process, ProcessMeta> processes = new ConcurrentHashMap<>();
 
     private ProcessManager() {
         ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();

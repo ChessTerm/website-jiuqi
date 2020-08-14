@@ -1,5 +1,6 @@
-package com.chessterm.website.jiuqi.service;
+package com.chessterm.website.jiuqi.handler;
 
+import com.chessterm.website.jiuqi.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,7 +15,7 @@ import java.util.regex.Pattern;
 public class SelfMatcher implements RequestMatcher {
 
     @Autowired
-    UserService userService;
+    UserDetailsServiceImpl userDetailsService;
 
     @Override
     public boolean matches(HttpServletRequest request) {
@@ -39,7 +40,7 @@ public class SelfMatcher implements RequestMatcher {
                 if (authentication.getPrincipal().equals(inputUserId)) {
                     return true;
                 } else {
-                    UserDetails inputUser = userService.loadUserByUsername(inputUserId);
+                    UserDetails inputUser = userDetailsService.loadUserByUsername(inputUserId);
                     String password = inputUser.getPassword();
                     return password == null || password.isEmpty();
                 }

@@ -1,4 +1,4 @@
-package com.chessterm.website.jiuqi.service;
+package com.chessterm.website.jiuqi.handler;
 
 import com.chessterm.website.jiuqi.model.ReturnData;
 import org.springframework.security.access.AccessDeniedException;

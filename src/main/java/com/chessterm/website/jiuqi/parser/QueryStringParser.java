@@ -1,4 +1,4 @@
-package com.chessterm.website.jiuqi.service;
+package com.chessterm.website.jiuqi.parser;
 
 import java.io.IOException;
 import java.net.URLDecoder;

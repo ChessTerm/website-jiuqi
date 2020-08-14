@@ -1,6 +1,6 @@
 package com.chessterm.website.jiuqi.model;
 
-import com.chessterm.website.jiuqi.service.StateParser;
+import com.chessterm.website.jiuqi.parser.StateParser;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +11,8 @@ import javax.persistence.*;
 @Setter
 public class Board {
 
-    public Board() {}
+    public Board() {
+    }
 
     public Board(Game game, User user) {
         this.game = game;

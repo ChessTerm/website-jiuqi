@@ -4,7 +4,7 @@ import com.chessterm.website.jiuqi.model.Board;
 import com.chessterm.website.jiuqi.model.ReturnData;
 import com.chessterm.website.jiuqi.model.State;
 import com.chessterm.website.jiuqi.model.User;
-import com.chessterm.website.jiuqi.repository.BoardRepository;
+import com.chessterm.website.jiuqi.service.BoardService;
 import com.chessterm.website.jiuqi.service.mcts.Params;
 import com.chessterm.website.jiuqi.service.mcts.ProcessCallbacks;
 import com.chessterm.website.jiuqi.service.mcts.ProcessManager;
@@ -28,26 +28,22 @@ public class JiuqiToolBoxController {
     SimpMessagingTemplate template;
 
     @Autowired
-    BoardRepository boardRepository;
-
-    @Autowired
-    BoardController boardController;
+    BoardService service;
 
     @PostMapping("/parse_state")
     public void parseState(@RequestBody String request, @AuthenticationPrincipal User user,
                            HttpServletResponse response) {
-        Board board = boardRepository.findByUserIdAndGameId(user.getId(), gameId);
+        Board board = service.get(user.getId(), gameId);
         if (board != null) {
-            Scanner scanner = new Scanner(request);
-            State state = new State(StateParser.parse(scanner));
-            boardController.updateState(board, state);
+            State state = new State(StateParser.parse(new Scanner(request)));
+            board = service.setState(board, state);
             template.convertAndSend(String.format("/topic/boards/%s/sync", board.getId()), state);
         } else response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
 
     @GetMapping("/export_state")
     public ReturnData exportState(@AuthenticationPrincipal User user) {
-        Board board = boardRepository.findByUserIdAndGameId(user.getId(), gameId);
+        Board board = service.get(user.getId(), gameId);
         StringBuilder result = new StringBuilder();
         if (board != null) {
             State state = board.getState();
@@ -75,14 +71,14 @@ public class JiuqiToolBoxController {
 
     @PostMapping("/next_step/start")
     public ReturnData nextStepStart(@RequestParam(defaultValue = "0") byte player,
-                              @RequestParam(defaultValue = "") Stage stage,
-                              @AuthenticationPrincipal User user) {
+                                    @RequestParam(defaultValue = "") Stage stage,
+                                    @AuthenticationPrincipal User user) {
         if (player != -1 && player != 1) {
             return new ReturnData(false, "Invalid player.");
         } else if (stage != Stage.LAYOUT && stage != Stage.PLAY) {
             return new ReturnData(false, "Invalid stage.");
         } else {
-            Board board = boardRepository.findByUserIdAndGameId(user.getId(), gameId);
+            Board board = service.get(user.getId(), gameId);
             if (board == null) {
                 return new ReturnData(false, "Board not found.");
             } else {
@@ -91,18 +87,18 @@ public class JiuqiToolBoxController {
                 String callbackDestination = String.format("/topic/next_step/%s/", user.getId());
                 String syncDestination = String.format("/topic/boards/%s/sync", board.getId());
                 ProcessCallbacks callbacks = new ProcessCallbacks(message -> {
-                    System.out.print("Fail: ");
-                    System.out.println(message);
+                    // System.out.print("Fail: ");
+                    // System.out.println(message);
                     template.convertAndSend(callbackDestination + "/fail", message);
                 }, newState -> {
-                    System.out.print("Success: ");
-                    System.out.println(newState);
-                    boardController.updateState(board, newState);
+                    // System.out.print("Success: ");
+                    // System.out.println(newState);
+                    service.setState(board, newState);
                     template.convertAndSend(syncDestination, newState);
                     template.convertAndSend(callbackDestination + "/success", "");
                 }, progress -> {
-                    System.out.print("Progress: ");
-                    System.out.println(progress);
+                    // System.out.print("Progress: ");
+                    // System.out.println(progress);
                     template.convertAndSend(callbackDestination + "/progress", progress);
                 });
                 ProcessManager manager = ProcessManager.getInstance();

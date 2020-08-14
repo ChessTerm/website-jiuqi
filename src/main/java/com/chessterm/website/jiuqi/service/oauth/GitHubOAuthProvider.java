@@ -3,10 +3,13 @@ package com.chessterm.website.jiuqi.service.oauth;
 import com.chessterm.website.jiuqi.model.AssociatedPlatform;
 import com.chessterm.website.jiuqi.model.Association;
 import com.chessterm.website.jiuqi.model.User;
+import com.chessterm.website.jiuqi.parser.QueryStringParser;
 import com.chessterm.website.jiuqi.repository.AssociationRepository;
 import com.chessterm.website.jiuqi.repository.UserRepository;
-import com.chessterm.website.jiuqi.service.QueryStringParser;
-import org.kohsuke.github.*;
+import org.kohsuke.github.GHEmail;
+import org.kohsuke.github.GHMyself;
+import org.kohsuke.github.GitHub;
+import org.kohsuke.github.GitHubBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -22,7 +25,7 @@ import java.util.Map;
 
 /**
  * Authorize with GitHub.
- *
+ * <p>
  * References:
  * https://docs.github.com/cn/developers/apps/authorizing-oauth-apps#web-application-flow
  */
@@ -50,10 +53,8 @@ public class GitHubOAuthProvider extends OAuthProvider {
      * Step 1:
      * Redirect to this URL to authorize.
      *
-     * All available scopes:
-     * https://docs.github.com/en/developers/apps/scopes-for-oauth-apps#available-scopes
-     *
-     * @param scope scopes to request
+     * @param scope <p>scopes to request</p>
+     *              <p>All available scopes: https://docs.github.com/en/developers/apps/scopes-for-oauth-apps#available-scopes</p>
      * @return URL to redirect
      */
     public String getAuthorizeUrl(String scope) {
@@ -88,10 +89,10 @@ public class GitHubOAuthProvider extends OAuthProvider {
 
     /**
      * Step 3:
-     * Save the OAuth token provided by GitHub and check if
-     * the GitHub account has already associated with a user,
-     * If associated, login directly;
-     * If not, redirect to ask associate or create new user.
+     * <p>Save the OAuth token provided by GitHub and check if
+     * the GitHub account has already associated with a user.</p>
+     * <p>If associated, login directly;</p>
+     * <p>If not, redirect to ask associate or create new user.</p>
      *
      * @param token OAuth token requested from GitHub
      * @return Whether to redirect
@@ -148,8 +149,8 @@ public class GitHubOAuthProvider extends OAuthProvider {
     }
 
     /**
-     * Get primary email address of a user.
-     * Returns null when all email address is unverified.
+     * <p>Get primary email address of a user.</p>
+     * <p>Returns null when all email address is unverified.</p>
      *
      * @param user GitHub user myself object
      * @return Primary email address of this user

@@ -1,4 +1,4 @@
-package com.chessterm.website.jiuqi.service;
+package com.chessterm.website.jiuqi.handler;
 
 import com.chessterm.website.jiuqi.model.ReturnData;
 import org.springframework.security.core.Authentication;
@@ -13,7 +13,7 @@ import java.io.IOException;
 public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler {
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         String account = authentication.getName();
         HttpSession session = request.getSession();
         session.setAttribute("user", account);

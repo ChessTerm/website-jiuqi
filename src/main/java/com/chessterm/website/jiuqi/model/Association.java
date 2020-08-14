@@ -11,7 +11,8 @@ import javax.persistence.*;
 @Setter
 public class Association {
 
-    public Association() {}
+    public Association() {
+    }
 
     public Association(AssociatedPlatform platform, User user) {
         this.platform = platform;

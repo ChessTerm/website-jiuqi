@@ -1,6 +1,7 @@
 package com.chessterm.website.jiuqi.model;
 
-import com.chessterm.website.jiuqi.service.StateParser;
+import com.chessterm.website.jiuqi.parser.StateParser;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,6 +35,7 @@ public class StateHistory {
     @Column(nullable = false)
     private long timestamp;
 
+    @JsonValue
     public State getState() {
         return StateParser.toState(state, board.getGame().getRow());
     }
