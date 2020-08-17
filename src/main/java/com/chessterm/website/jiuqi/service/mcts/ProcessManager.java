@@ -15,9 +15,9 @@ import java.util.concurrent.TimeUnit;
 
 public class ProcessManager {
 
-    private static ProcessManager instance = null;
-
     private static final int maxTime = 300000;  // Kill after 5 minutes.
+
+    private static ProcessManager instance = null;
 
     protected final Map<Process, ProcessMeta> processes = new ConcurrentHashMap<>();
 
@@ -55,20 +55,6 @@ public class ProcessManager {
                 processes.remove(process);
             }
         });
-    }
-
-    private static ProcessBuilder buildCommand() {
-        String javaHome = System.getProperty("java.home");
-        String separator = System.getProperty("file.separator");
-        String classPath = System.getProperty("java.class.path");
-        if (classPath.contains("boot.jar")) classPath = "./*";
-        List<String> command = new ArrayList<>();
-        command.add(javaHome + separator + "bin" + separator + "java");
-        command.add("-cp");
-        command.add(classPath);
-        command.add("-Xmx512M");  // Limit process RAM to 0.5GB.
-        command.add(Runner.class.getName());
-        return new ProcessBuilder(command);
     }
 
     private Runnable processWatcher() {
@@ -126,6 +112,20 @@ public class ProcessManager {
                 e.printStackTrace();
             }
         };
+    }
+
+    private static ProcessBuilder buildCommand() {
+        String javaHome = System.getProperty("java.home");
+        String separator = System.getProperty("file.separator");
+        String classPath = System.getProperty("java.class.path");
+        if (classPath.contains("boot.jar")) classPath = "./*";
+        List<String> command = new ArrayList<>();
+        command.add(javaHome + separator + "bin" + separator + "java");
+        command.add("-cp");
+        command.add(classPath);
+        command.add("-Xmx512M");  // Limit process RAM to 0.5GB.
+        command.add(Runner.class.getName());
+        return new ProcessBuilder(command);
     }
 
     public static ProcessManager getInstance() {

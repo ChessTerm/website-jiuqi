@@ -1,11 +1,12 @@
 package com.chessterm.website.jiuqi.handler;
 
-import com.chessterm.website.jiuqi.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +16,8 @@ import java.util.regex.Pattern;
 public class SelfMatcher implements RequestMatcher {
 
     @Autowired
-    UserDetailsServiceImpl userDetailsService;
+    @Qualifier("customUserService")
+    UserDetailsService userDetailsService;
 
     @Override
     public boolean matches(HttpServletRequest request) {

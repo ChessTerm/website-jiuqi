@@ -7,7 +7,9 @@ import java.util.function.Consumer;
 public class ProcessCallbacks {
 
     final Consumer<String> onFailure;
+
     final Consumer<State> onSuccess;
+
     final Consumer<Progress> onProgress;
 
     public ProcessCallbacks(Consumer<String> onFailure,

@@ -35,13 +35,8 @@ public class GitHubOAuthProvider extends OAuthProvider {
     private static final AssociatedPlatform platform = AssociatedPlatform.GITHUB;
 
     private static final String authorizeUrl = "https://github.com/login/oauth/authorize";
+
     private static final String tokenUrl = "https://github.com/login/oauth/access_token";
-
-    @Value("${spring.security.oauth2.client.registration.github.clientId}")
-    private String clientId;
-
-    @Value("${spring.security.oauth2.client.registration.github.clientSecret}")
-    private String clientSecret;
 
     @Autowired
     AssociationRepository repository;
@@ -49,12 +44,19 @@ public class GitHubOAuthProvider extends OAuthProvider {
     @Autowired
     UserRepository userRepository;
 
+    @Value("${spring.security.oauth2.client.registration.github.clientId}")
+    private String clientId;
+
+    @Value("${spring.security.oauth2.client.registration.github.clientSecret}")
+    private String clientSecret;
+
     /**
      * Step 1:
      * Redirect to this URL to authorize.
      *
      * @param scope <p>scopes to request</p>
      *              <p>All available scopes: https://docs.github.com/en/developers/apps/scopes-for-oauth-apps#available-scopes</p>
+     *
      * @return URL to redirect
      */
     public String getAuthorizeUrl(String scope) {
@@ -71,6 +73,7 @@ public class GitHubOAuthProvider extends OAuthProvider {
      * Use the code provided to request an OAuth token.
      *
      * @param code code provided by GitHub
+     *
      * @return OAuth token requested from GitHub
      */
     public String requestToken(String code) {
@@ -95,6 +98,7 @@ public class GitHubOAuthProvider extends OAuthProvider {
      * <p>If not, redirect to ask associate or create new user.</p>
      *
      * @param token OAuth token requested from GitHub
+     *
      * @return Whether to redirect
      */
     public boolean saveToken(String token, User user, boolean create) throws IOException {
@@ -136,6 +140,7 @@ public class GitHubOAuthProvider extends OAuthProvider {
      * Create a new user by the GitHub user.
      *
      * @param githubUser GitHub user object
+     *
      * @return The new user created
      */
     private User createUser(GHMyself githubUser) {
@@ -153,6 +158,7 @@ public class GitHubOAuthProvider extends OAuthProvider {
      * <p>Returns null when all email address is unverified.</p>
      *
      * @param user GitHub user myself object
+     *
      * @return Primary email address of this user
      */
     private String getEmail(GHMyself user) throws IOException {

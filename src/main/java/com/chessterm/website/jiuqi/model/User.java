@@ -2,6 +2,7 @@ package com.chessterm.website.jiuqi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,6 +17,7 @@ import java.util.Collection;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class User implements UserDetails {
 
     @Id
@@ -30,6 +32,15 @@ public class User implements UserDetails {
 
     @Column(nullable = false)
     private boolean admin;
+
+    public User(long id) {
+        this(id, false);
+    }
+
+    public User(long id, boolean admin) {
+        this.id = id;
+        this.admin = admin;
+    }
 
     @Override
     public String getUsername() {

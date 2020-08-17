@@ -11,7 +11,9 @@ import java.io.IOException;
 public class Runner {
 
     private static final int maxNode = 1000;
+
     private static final int maxDepth = Integer.MAX_VALUE;
+
     private static final int threads = 1;
 
     public static State run(Params params) {

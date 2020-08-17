@@ -1,10 +1,13 @@
 # Global config
 spring:
+  profiles:
+    active: prod
   jpa:
     hibernate:
       ddl-auto: update
-  profiles:
-    active: prod
+logging:
+  level:
+    root: warn
 ---
 # Dev config
 spring:

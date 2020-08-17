@@ -3,7 +3,6 @@ package com.chessterm.website.jiuqi.service;
 import com.chessterm.website.jiuqi.model.*;
 import com.chessterm.website.jiuqi.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -41,10 +40,8 @@ public class BoardService {
         } else if (user != null) {
             if (user.getId() == owner.getId()) {
                 return new Role(true, true);
-            } else for (GrantedAuthority authority: user.getAuthorities()) {
-                if (authority.getAuthority().equals("admin"))
-                    return new Role(true, true);
-            }
+            } else if (user.isAdmin())
+                return new Role(true, true);
         }
         return new Role(true, false);
     }
