@@ -17,3 +17,6 @@ spring:
     password: spring
   jpa:
     show-sql: true
+logging:
+  level:
+    root: info

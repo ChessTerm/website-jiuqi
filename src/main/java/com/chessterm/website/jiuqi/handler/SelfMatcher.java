@@ -1,5 +1,7 @@
 package com.chessterm.website.jiuqi.handler;
 
+import com.chessterm.website.jiuqi.model.Board;
+import com.chessterm.website.jiuqi.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
@@ -19,6 +21,9 @@ public class SelfMatcher implements RequestMatcher {
     @Qualifier("customUserService")
     UserDetailsService userDetailsService;
 
+    @Autowired
+    BoardService boardService;
+
     @Override
     public boolean matches(HttpServletRequest request) {
         String method = request.getMethod();
@@ -34,9 +39,12 @@ public class SelfMatcher implements RequestMatcher {
             if (matcher.find()) {
                 inputUserId = matcher.group(1);
             } else {
-                pattern = Pattern.compile("boards/(.*)\\.?");
+                pattern = Pattern.compile("boards/([0-9]*)");
                 matcher = pattern.matcher(url);
-                if (matcher.find()) inputUserId = matcher.group(1);
+                if (matcher.find()) {
+                    Board board = boardService.get(Integer.parseInt(matcher.group(1)));
+                    if (board != null) inputUserId = String.valueOf(board.getUser().getId());
+                }
             }
             if (inputUserId != null) {
                 if (authentication.getPrincipal().equals(inputUserId)) {

@@ -3,6 +3,7 @@ package com.chessterm.website.jiuqi.controller;
 import com.chessterm.website.jiuqi.model.*;
 import com.chessterm.website.jiuqi.service.BoardService;
 import com.chessterm.website.jiuqi.service.StateHistoryService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -11,6 +12,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RequestMapping("/boards")
 @RestController
@@ -36,7 +39,7 @@ public class BoardController {
     @GetMapping("/find")
     public ReturnData find(@RequestParam(value = "user", defaultValue = "0") long userId,
                            @RequestParam("game") int gameId, @AuthenticationPrincipal User user) {
-        if (userId == 0) if (user != null) userId = user.getId();
+        if (userId == 0 && user != null) userId = user.getId();
         Board board = service.get(userId, gameId);
         if (board != null) {
             return new ReturnData(true, board);
@@ -48,6 +51,21 @@ public class BoardController {
         Board board = service.get(id);
         if (board != null) {
             return new ReturnData(true, historyService.get(board));
+        } else return new ReturnData(false, "Board not found.");
+    }
+
+    @RequestMapping("/{id}/update")
+    public ReturnData updateBoard(@PathVariable long id, @RequestParam("state") String rawState,
+                                  @AuthenticationPrincipal User user) throws IOException {
+        Board board = service.get(id);
+        if (board != null) {
+            Role role = service.getRole(board, user);
+            if (role.isWrite()) {
+                State state = new ObjectMapper().readValue(rawState, State.class);
+                service.setState(board, state);
+                template.convertAndSend(String.format("/topic/boards/%s/sync", board.getId()), state);
+                return new ReturnData(true);
+            } else return new ReturnData(false, "Access denied.");
         } else return new ReturnData(false, "Board not found.");
     }
 
