@@ -23,14 +23,14 @@ configurations {
 repositories {
 	maven { url "https://maven.aliyun.com/repository/public/" }
     maven { url "https://maven.aliyun.com/repository/spring/" }
-    mavenLocal()
     mavenCentral()
 	maven {
 		url "https://maven.pkg.github.com/ChessTerm/flamechess-java"
 		credentials {
-			username System.getenv("GITHUB_USER")
-			// Due to GitHub restrictions, you must set the GITHUB_TOKEN variable.
-			password System.getenv("GITHUB_TOKEN")
+			username project.properties['github.user']
+			// Due to GitHub restrictions, you must set the github.token property
+			// to a GitHub Personal Access Token of yours with at least the role `read:packages`
+			password project.properties['github.token']
 		}
 	}
 }
