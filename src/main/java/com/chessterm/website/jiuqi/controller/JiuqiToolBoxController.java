@@ -69,6 +69,7 @@ public class JiuqiToolBoxController {
         } else return new ReturnData(false, "Board not found.");
     }
 
+    /* Next Step endpoints, disabled for now.
     @PostMapping("/next_step/start")
     public ReturnData nextStepStart(@RequestParam(defaultValue = "0") byte player,
                                     @RequestParam(defaultValue = "") Stage stage,
@@ -121,5 +122,5 @@ public class JiuqiToolBoxController {
         ProcessManager manager = ProcessManager.getInstance();
         manager.stop(user);
         return new ReturnData(true);
-    }
+    } */
 }
