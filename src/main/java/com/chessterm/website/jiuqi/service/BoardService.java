@@ -24,7 +24,7 @@ public class BoardService {
 
     public Board get(User user, Game game, boolean create) {
         Board board = get(user.getId(), game.getId());
-        if (create) board = create(user, game);
+        if (board == null && create) board = create(user, game);
         return board;
     }
 
