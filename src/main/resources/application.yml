@@ -13,9 +13,9 @@ logging:
 spring:
   profiles: dev
   datasource:
-    username: spring
-    password: spring
+    url: jdbc:h2:file:./src/main/resources/data/dev;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE
   jpa:
+    database: h2
     show-sql: true
 logging:
   level:
