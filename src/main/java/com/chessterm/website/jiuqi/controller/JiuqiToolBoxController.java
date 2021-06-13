@@ -109,6 +109,27 @@ public class JiuqiToolBoxController {
                 } else return new ReturnData(false, "Process exists.");
             }
         }
+    } */
+
+    @PostMapping("/next_step/start")
+    public ReturnData nextStepStart(@RequestParam(defaultValue = "0") byte player,
+                                    @RequestParam(defaultValue = "") Stage stage,
+                                    @AuthenticationPrincipal User user) {
+        if (player != -1 && player != 1) {
+            return new ReturnData(false, "Invalid player.");
+        } else if (stage != Stage.LAYOUT && stage != Stage.PLAY) {
+            return new ReturnData(false, "Invalid stage.");
+        } else {
+            Board board = service.get(user.getId(), gameId);
+            if (board == null) {
+                return new ReturnData(false, "Board not found.");
+            } else {
+                State state = board.getState();
+                Params params = new Params(state, player, stage);
+                template.convertAndSend(String.format("/topic/boards/%s/next_step", board.getId()), params);
+                return new ReturnData(true);
+            }
+        }
     }
 
     @GetMapping("/next_step/check")
@@ -117,7 +138,7 @@ public class JiuqiToolBoxController {
         return new ReturnData(true, manager.exists(user));
     }
 
-    @PostMapping("/next_step/stop")
+    /* @PostMapping("/next_step/stop")
     public ReturnData nextStepStop(@AuthenticationPrincipal User user) {
         ProcessManager manager = ProcessManager.getInstance();
         manager.stop(user);
